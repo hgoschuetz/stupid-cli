@@ -1,0 +1,2 @@
+- add tab support (makefile looks meh)
+- add options (start with supporting all of the original lolcat opts)
