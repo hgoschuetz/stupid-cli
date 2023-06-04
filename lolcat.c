@@ -3,11 +3,14 @@
 
 #include <math.h>
 
-static float frequency = 0.3f;
+#define TABSIZE 8
+
+static float frequency = 0.1f;
 
 static void lol(const char *filename);
+static void cat(FILE *fp);
 
-static void cat(char c, int i);
+static void rainbow(char c, int i);
 
 int main(int argc, const char *argv[])
 {
@@ -25,30 +28,46 @@ static void lol(const char *filename)
 {
         FILE *fp = NULL;
 
-        int c;
-        int i = 0;
-        int offset = 0;
-
         if ((fp = fopen(filename, "r")) == NULL)
         {
                 fprintf(stderr, "error: could not open file '%s'\n", filename);
                 exit(EXIT_FAILURE);
         }
 
-        while ((c = getc(fp)) != EOF)
-        {
-                cat(c, i);
-
-                if (c == '\n')
-                        i = ++offset;
-                else
-                        ++i;
-        }
+        cat(fp);
 
         fclose(fp);
 }
 
-static void cat(char c, int i)
+static void cat(FILE *fp)
+{
+        int c;
+
+        int col, off;
+
+        col = off = 0;
+
+        while ((c = getc(fp)) != EOF)
+        {
+                rainbow(c, (col + off));
+
+                switch (c)
+                {
+                case '\n':
+                        col = 0;
+                        ++off;
+                        break;
+                case '\t':
+                        col += TABSIZE - (col % TABSIZE);
+                        break;
+                default:
+                        ++col;
+                        break;
+                }
+        }
+}
+
+static void rainbow(char c, int i)
 {
         int r, g, b;
 
