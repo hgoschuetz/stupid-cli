@@ -8,4 +8,4 @@ clean:
 	rm lolcat
 
 lolcat:
-	$(CC) $(CFLAGS) lolcat.c -o lolcat
+	$(CC) $(CFLAGS) lolcat/lolcat.c -o lolcat/lolcat
